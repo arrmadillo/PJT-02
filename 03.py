@@ -1,10 +1,34 @@
 import requests
 from pprint import pprint
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY = os.environ.get('API_KEY')
 
 
 def ranking():
     pass
     # 여기에 코드를 작성합니다.
+    BASE_URL = 'https://api.themoviedb.org/3'
+    path = '/movie/popular' 
+    params = { # 
+    'api_key' : API_KEY,
+    'language': 'ko-KR',
+    'region'  : 'KR'
+    }
+    res = requests.get(BASE_URL+path, params=params).json()
+    res = res['results']
+    print("---")
+    pprint(res)
+    res = sorted(res, key = lambda x: x['vote_average'], reverse=True)
+    '''
+    reverse=True -> 내림차순(큰 숫자가 앞)
+    key 옵션은 함수를 넣어야한다.
+    위 람다 함수에서 x는 res라는 리스트안에 딕셔너리를 향하고 있다.
+    즉 해석하면 딕셔너리['vote_average']의 값이 큰 순서대로 정렬하겠다.
+    '''
+    return res[0:5]
 
 
 # 아래의 코드는 수정하지 않습니다.
